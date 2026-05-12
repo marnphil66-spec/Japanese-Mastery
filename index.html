@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Japanese Mastery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --prussian-blue: #003153;
+      --vibrant-coral: #ff6f61;
+      --alabaster-grey: #ededed;
+      --khaki-beige: #c3b091;
+      --white: #ffffff;
+      --text-dark: #1f2933;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: var(--prussian-blue);
+      color: var(--white);
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(0, 49, 83, 0.95);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .logo {
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 1rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.9rem;
+    }
+
+    nav a {
+      position: relative;
+      padding-bottom: 0.2rem;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background: var(--vibrant-coral);
+      transition: width 0.25s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .search-wrapper {
+      position: relative;
+    }
+
+    .search-input {
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(0, 0, 0, 0.15);
+      color: var(--white);
+      font-size: 0.85rem;
+      width: 150px;
+      transition: all 0.25s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      width: 220px;
+      background: rgba(0, 0, 0, 0.35);
+      box-shadow: 0 0 0 2px var(--vibrant-coral);
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 0.45rem 1rem;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--vibrant-coral);
+      color: var(--white);
+      box-shadow: 0 8px 18px rgba(255, 111, 97, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(255, 111, 97, 0.55);
+      background: #ff8579;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    section {
+      margin: 2.5rem 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.2fr);
+      gap: 2rem;
+      align-items: center;
+      margin-top: 1.5rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 4vw, 2.7rem);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-subtitle {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.95rem;
+      max-width: 30rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero-note {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .hero-card {
+      background: radial-gradient(circle at top left, var(--vibrant-coral), var(--prussian-blue));
+      border-radius: 1.5rem;
+      padding: 1.4rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .hero-card h2 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-card p {
+      font-size: 0.85rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-card ul {
+      list-style: none;
+      font-size: 0.8rem;
+    }
+
+    .hero-card li {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--white);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.3rem;
+    }
+
+    .section-header span {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--alabaster-grey);
+      color: var(--text-dark);
+      border-radius: 1rem;
+      padding: 1rem;
+      border: 1px solid var(--khaki-beige);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.35);
+      border-color: var(--vibrant-coral);
+    }
+
+    .card-title {
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      font-size: 1rem;
+    }
+
+    .card-subtitle {
+      font-size: 0.8rem;
+      color: #4b5563;
+      margin-bottom: 0.6rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .pill {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(0, 49, 83, 0.08);
+      color: #111827;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      margin-top: 0.4rem;
+      color: #4b5563;
+    }
+
+    .flashcard-container {
+      perspective: 1000px;
+      height: 180px;
+    }
+
+    .flashcard {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.6s ease;
+      cursor: pointer;
+    }
+
+    .flashcard.flip {
+      transform: rotateY(180deg);
+    }
+
+    .flashcard-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .flashcard-front {
+      background: var(--alabaster-grey);
+    }
+
+    .flashcard-back {
+      background: #fefaf5;
+      transform: rotateY(180deg);
+    }
+
+    .flashcard-kanji {
+      font-size: 2.4rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .flashcard-reading {
+      font-size: 0.9rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .flashcard-meaning {
+      font-size: 0.85rem;
+      color: #4b5563;
+    }
+
+    .audio-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      margin-top: 0.4rem;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--vibrant-coral), var(--khaki-beige));
+      transition: width 0.6s ease;
+    }
+
+    .routine-steps {
+      list-style: none;
+      font-size: 0.8rem;
+      color: #374151;
+      margin-top: 0.4rem;
+    }
+
+    .routine-steps li {
+      margin-bottom: 0.25rem;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.4rem;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(255, 111, 97, 0.12);
+      color: #7f1d1d;
+    }
+
+    .pricing {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .price-tag {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--vibrant-coral);
+      margin-bottom: 0.4rem;
+    }
+
+    .price-note {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 0.8rem;
+    }
+
+    .payment-methods {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .payment-pill {
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .payment-box {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 1rem;
+      padding: 1rem;
+      border: 1px dashed rgba(255, 255, 255, 0.4);
+      font-size: 0.8rem;
+    }
+
+    .payment-box strong {
+      color: var(--vibrant-coral);
+    }
+
+    footer {
+      padding: 1.5rem 1.25rem 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      font-size: 0.8rem;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    @media (max-width: 800px) {
+      header {
+        flex-wrap: wrap;
+        gap: 0.6rem;
+      }
+      nav {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .pricing {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Japanese Mastery</div>
+    <nav>
+      <a href="#learn">Learn</a>
+      <a href="#routines">Routines</a>
+      <a href="#games">Games</a>
+      <a href="#pricing">Pricing</a>
+    </nav>
+    <div class="header-actions">
+      <div class="search-wrapper">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search words, kana..."
+          id="search-input"
+        />
+      </div>
+      <button class="btn btn-ghost">Log in</button>
+      <button class="btn btn-primary" onclick="scrollToSection('pricing')">
+        Go Premium • $0.99
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero visible" id="top">
+      <div>
+        <h1 class="hero-title">Master Japanese with flashcards, audio, and fun routines.</h1>
+        <p class="hero-subtitle">
+          Japanese Mastery combines sentence building, native audio, sight words, and custom learning routines
+          into one playful, focused platform.
+        </p>
+        <div class="hero-tags">
+          <span class="tag">Hiragana & Katakana</span>
+          <span class="tag">Kanji & Sight Words</span>
+          <span class="tag">Speaking & Listening</span>
+        </div>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="scrollToSection('learn')">
+            Start learning now
+          </button>
+          <button class="btn btn-ghost" onclick="scrollToSection('games')">
+            Try mini‑games
+          </button>
+        </div>
+        <p class="hero-note">
+          Build sentences, hear native pronunciation, and track your streak—all in under 10 minutes a day.
+        </p>
+      </div>
+      <div class="hero-card">
+        <h2>Today’s snapshot</h2>
+        <p>Here’s what a typical session in Japanese Mastery looks like:</p>
+        <ul>
+          <li><span class="dot"></span> 10 flashcards (kana, kanji, or vocab)</li>
+          <li><span class="dot"></span> 5 audio listening drills</li>
+          <li><span class="dot"></span> 1 custom routine (reading + speaking)</li>
+          <li><span class="dot"></span> 1 quick mini‑game for fun</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- LEARN -->
+    <section id="learn">
+      <div class="section-header">
+        <h2>Learn Japanese your way</h2>
+        <span>Flashcards, audio, sight words, and sentence building in one place.</span>
+      </div>
+
+      <div class="grid">
+        <!-- Flashcards -->
+        <div class="card">
+          <div class="card-title">Smart Flashcards</div>
+          <div class="card-subtitle">Kana, kanji, and vocabulary that adapt to you.</div>
+          <div class="flashcard-container" onclick="toggleFlashcard()">
+            <div class="flashcard" id="flashcard">
+              <div class="flashcard-face flashcard-front">
+                <div class="flashcard-kanji">日</div>
+                <div class="flashcard-reading">にち / ひ</div>
+                <div class="flashcard-meaning">day, sun</div>
+              </div>
+              <div class="flashcard-face flashcard-back">
+                <div class="flashcard-meaning">
+                  Example: <strong>日本</strong>（にほん）= Japan<br />
+                  Tap to flip back.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span>Tap card to flip • SRS‑style scheduling</span>
+          </div>
+        </div>
+
+        <!-- Audio -->
+        <div class="card">
+          <div class="card-title">Audio Learning</div>
+          <div class="card-subtitle">Hear native pronunciation and shadow along.</div>
+          <p style="font-size:0.85rem; color:#374151;">
+            Practice listening and speaking with short, clear audio clips for greetings, phrases, and sentences.
+          </p>
+          <div class="audio-controls">
+            <button class="btn btn-primary" style="font-size:0.75rem; padding:0.3rem 0.7rem;" onclick="playSampleAudio()">
+              ▶ Play sample
+            </button>
+            <span id="audio-status">Ready</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="audio-progress"></div>
+          </div>
+          <div class="card-footer">
+            <span>Shadow mode • Repeat after native audio</span>
+          </div>
+        </div>
+
+        <!-- Sight Words -->
+        <div class="card">
+          <div class="card-title">Sight Words & Reading</div>
+          <div class="card-subtitle">High‑frequency words for real‑world reading.</div>
+          <div class="pill-row">
+            <span class="pill">これ (this)</span>
+            <span class="pill">それ (that)</span>
+            <span class="pill">ここ (here)</span>
+            <span class="pill">日本 (Japan)</span>
+            <span class="pill">学生 (student)</span>
+          </div>
+          <p style="font-size:0.8rem; color:#374151;">
+            Learn the words you’ll see everywhere—menus, signs, manga, and messages—so Japanese starts to feel
+            familiar fast.
+          </p>
+          <div class="card-footer">
+            <span>Short reading drills • Furigana support</span>
+          </div>
+        </div>
+
+        <!-- Sentence Builder -->
+        <div class="card">
+          <div class="card-title">Sentence Builder</div>
+          <div class="card-subtitle">Drag‑and‑drop grammar blocks.</div>
+          <p style="font-size:0.8rem; color:#374151; margin-bottom:0.4rem;">
+            Build sentences like:
+          </p>
+          <div class="pill-row">
+            <span class="pill">わたしは</span>
+            <span class="pill">日本語を</span>
+            <span class="pill">べんきょうします</span>
+          </div>
+          <p style="font-size:0.8rem; color:#374151; margin-top:0.4rem;">
+            “I study Japanese.” Learn patterns, not just words.
+          </p>
+          <div class="card-footer">
+            <span>Grammar templates • Instant feedback</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROUTINES -->
+    <section id="routines">
+      <div class="section-header">
+        <h2>Custom routines that fit your day</h2>
+        <span>Pick your time, focus, and difficulty.</span>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="card-title">10‑Minute Daily Routine</div>
+          <div class="card-subtitle">Perfect for busy days.</div>
+          <ul class="routine-steps">
+            <li>• 5 flashcards (kana or kanji)</li>
+            <li>• 3 audio phrases</li>
+            <li>• 1 quick reading snippet</li>
+            <li>• 1 mini‑game</li>
+          </ul>
+          <div class="badge-row">
+            <span class="badge">Beginner‑friendly</span>
+            <span class="badge">Streak builder</span>
+          </div>
+          <div class="card-footer">
+            <span>Auto‑scheduled • Streak tracking</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Speaking Focus</div>
+          <div class="card-subtitle">Train your mouth and ears.</div>
+          <ul class="routine-steps">
+            <li>• Shadow 5 sentences</li>
+            <li>• Record your voice</li>
+            <li>• Compare to native audio</li>
+          </ul>
+          <p style="font-size:0.8rem; color:#374151; margin-top:0.4rem;">
+            Uses your microphone (with permission) to help you sound more natural.
+          </p>
+          <div class="card-footer">
+            <span>Pronunciation practice • Confidence boost</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Kanji Power Hour</div>
+          <div class="card-subtitle">For when you want to grind.</div>
+          <ul class="routine-steps">
+            <li>• 20 kanji flashcards</li>
+            <li>• 10 sight word combos</li>
+            <li>• 1 reading passage</li>
+          </ul>
+          <div class="badge-row">
+            <span class="badge">Intermediate</span>
+            <span class="badge">XP booster</span>
+          </div>
+          <div class="card-footer">
+            <span>Level‑based • XP & badges</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Build your own routine</div>
+          <div class="card-subtitle">You choose the mix.</div>
+          <p style="font-size:0.8rem; color:#374151;">
+            Pick how many flashcards, audio drills, games, and reading tasks you want. Save it as “Morning
+            Train,” “Night Session,” or anything you like.
+          </p>
+          <button class="btn btn-primary" style="margin-top:0.6rem; font-size:0.8rem;">
+            Create custom routine
+          </button>
+          <div class="card-footer">
+            <span>Personalized • Flexible</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAMES -->
+    <section id="games">
+      <div class="section-header">
+        <h2>Mini‑games that make it fun</h2>
+        <span>Turn practice into something you actually look forward to.</span>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="card-title">Kana Speed Match</div>
+          <div class="card-subtitle">Match ひらがな & カタカナ under time pressure.</div>
+          <p style="font-size:0.8rem; color:#374151;">
+            See “あ” and quickly tap the correct sound. The faster you go, the more XP you earn.
+          </p>
+          <div class="badge-row">
+            <span class="badge">Reflex training</span>
+            <span class="badge">Great for beginners</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Kanji Match</div>
+          <div class="card-subtitle">Match kanji to meanings and readings.</div>
+          <p style="font-size:0.8rem; color:#374151;">
+            Flip tiles to find pairs like 日 ↔ にち ↔ day. Great for visual learners.
+          </p>
+          <div class="badge-row">
+            <span class="badge">Memory game</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Listening Challenge</div>
+          <div class="card-subtitle">Hear a phrase, pick what it means.</div>
+          <p style="font-size:0.8rem; color:#374151;">
+            Choose the correct translation after listening. Perfect for training your ear.
+          </p>
+          <div class="badge-row">
+            <span class="badge">Audio focus</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Streak & XP System</div>
+          <div class="card-subtitle">Stay motivated with progress.</div>
+          <p style="font-size:0.8rem; color:#374151;">
+            Earn XP, unlock badges, and keep your streak alive. Learning feels like leveling up in a game.
+          </p>
+          <div class="badge-row">
+            <span class="badge">Daily streaks</span>
+            <span class="badge">Achievements</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING / PAYMENTS -->
+    <section id="pricing">
+      <div class="section-header">
+        <h2>Japanese Mastery Premium</h2>
+        <span>All features unlocked for a one‑time $0.99.</span>
+      </div>
+
+      <div class="pricing">
+        <div>
+          <div class="price-tag">$0.99</div>
+          <p class="price-note">
+            One‑time payment. No subscriptions. Unlock all flashcards, routines, games, and future updates.
+          </p>
+          <ul class="routine-steps" style="color:rgba(255,255,255,0.9);">
+            <li>• Unlimited flashcards & decks</li>
+            <li>• All mini‑games & XP system</li>
+            <li>• Custom routines & progress tracking</li>
+            <li>• Full audio library & speaking practice</li>
+          </ul>
+          <div class="payment-methods" style="margin-top:0.7rem;">
+            <span class="payment-pill">Credit card</span>
+            <span class="payment-pill">Debit card</span>
+            <span class="payment-pill">Stripe</span>
+            <span class="payment-pill">PayPal</span>
+            <span class="payment-pill">Apple Pay</span>
+            <span class="payment-pill">Google Pay</span>
+          </div>
+        </div>
+
+        <div class="payment-box">
+          <p>
+            <strong>Important:</strong> This is a front‑end demo. To actually charge $0.99 safely, you must connect
+            this button to a secure backend using a trusted payment provider like
+            <strong>Stripe</strong> or <strong>PayPal</strong>.
+          </p>
+          <p style="margin-top:0.5rem;">
+            When you’re ready, your developer can:
+          </p>
+          <ul style="margin-left:1rem; margin-top:0.25rem;">
+            <li>• Create a Stripe product for $0.99</li>
+            <li>• Use Stripe Checkout or Payment Links</li>
+            <li>• Verify payment, then unlock premium features</li>
+          </ul>
+          <button
+            class="btn btn-primary"
+            style="margin-top:0.7rem; width:100%; justify-content:center;"
+            onclick="fakeCheckout()"
+          >
+            Unlock Japanese Mastery • $0.99
+          </button>
+          <p id="checkout-status" style="margin-top:0.4rem; font-size:0.75rem; color:rgba(255,255,255,0.8);">
+            (Demo only) This would open a secure Stripe/PayPal checkout in a real app.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Japanese Mastery • Learn Japanese with flashcards, audio, and fun routines.  
+    This is a demo front‑end. Real payments require a secure backend and trusted providers like Stripe or PayPal.
+  </footer>
+
+  <script>
+    // Smooth scroll helper
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // Flashcard flip
+    function toggleFlashcard() {
+      const card = document.getElementById("flashcard");
+      card.classList.toggle("flip");
+    }
+
+    // Fake audio progress
+    let audioPlaying = false;
+    function playSampleAudio() {
+      const status = document.getElementById("audio-status");
+      const bar = document.getElementById("audio-progress");
+      if (audioPlaying) return;
+      audioPlaying = true;
+      status.textContent = "Playing sample...";
+      bar.style.width = "0%";
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 10;
+        bar.style.width = progress + "%";
+        if (progress >= 100) {
+          clearInterval(interval);
+          status.textContent = "Finished • Replay?";
+          audioPlaying = false;
+        }
+      }, 200);
+      // In a real app, you would play an actual audio file here.
+    }
+
+    // Fake checkout
+    function fakeCheckout() {
+      const status = document.getElementById("checkout-status");
+      status.textContent =
+        "In a real app, this would redirect to a secure Stripe or PayPal checkout for $0.99.";
+    }
+
+    // Scroll reveal for sections
+    const sections = document.querySelectorAll("section");
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    sections.forEach(sec => observer.observe(sec));
+  </script>
+</body>
+</html>
